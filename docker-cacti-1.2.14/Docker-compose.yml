@@ -1,0 +1,69 @@
+version: '3.5'
+services:
+
+  cacti:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cacti_master
+    domainname: example.com
+    hostname: cactimaster
+    depends_on:
+      - db-master
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DB_NAME=cacti_master
+      - DB_USER=cactiuser
+      - DB_PASS=cacti1234
+      - DB_HOST=db-master
+      - DB_PORT=3306
+      - DB_ROOT_PASS=admin
+      - INITIALIZE_DB=1
+      - TZ=America/Los_Angeles
+    volumes:
+      - cacti-master-data:/cacti
+      - cacti-master-spine:/spine
+      - cacti-master-backups:/backups
+    links:
+      - db-master
+
+  db-master:
+    image: "percona:5.7.14"
+    container_name: cacti_master_db
+    domainname: example.com
+    hostname: db-master
+    ports:
+      - "3306:3306"
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=200
+      - --max_heap_table_size=128M
+      - --max_allowed_packet=32M
+      - --tmp_table_size=128M
+      - --join_buffer_size=128M
+      - --innodb_buffer_pool_size=1G
+      - --innodb_doublewrite=ON
+      - --innodb_flush_log_at_timeout=3
+      - --innodb_read_io_threads=32
+      - --innodb_write_io_threads=16
+      - --innodb_buffer_pool_instances=9
+      - --innodb_file_format=Barracuda
+      - --innodb_large_prefix=1
+      - --innodb_io_capacity=5000
+      - --innodb_io_capacity_max=10000
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - TZ=America/Los_Angeles
+    volumes:
+      - cacti-db-master:/var/lib/mysql
+
+
+volumes:
+  cacti-db-master:
+  cacti-master-data:
+  cacti-master-spine:
+  cacti-master-backups:

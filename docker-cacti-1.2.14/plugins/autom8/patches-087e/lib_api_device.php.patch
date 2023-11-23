@@ -1,0 +1,19 @@
+--- cacti-0.8.7e/lib/api_device.php	2009-05-26 21:18:29.000000000 +0200
++++ plugin087e/lib/api_device.php	2009-05-16 11:45:16.000000000 +0200
+@@ -176,11 +173,16 @@
+ 			if (sizeof($graph_templates) > 0) {
+ 			foreach ($graph_templates as $graph_template) {
+ 				db_execute("replace into host_graph (host_id,graph_template_id) values ($host_id," . $graph_template["graph_template_id"] . ")");
++				api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $host_id, "graph_template_id" => $graph_template["graph_template_id"]));
+ 			}
+ 			}
+ 		}
+ 	}
+ 
++	# now that we have the id of the new host, we may plugin postprocessing code
++	$save["id"] = $host_id;
++	api_plugin_hook_function('api_device_new', $save);
++
+ 	return $host_id;
+ }
+ 

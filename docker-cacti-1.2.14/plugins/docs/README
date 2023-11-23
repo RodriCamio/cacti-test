@@ -1,0 +1,54 @@
+/*******************************************************************************
+
+    Author ......... Jimmy Conner
+    Contact ........ jimmy@sqmail.org
+    Home Site ...... http://www.cacti.net
+    Program ........ Document Viewer
+    Version ........ 0.4
+    Purpose ........ View Documents
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    Simple document viewer for Cacti
+
+----[ Features
+
+    Utilizes TinyMce for Full Screen Editing
+
+----[ Installation
+
+    Install just like any other plugin, just throw it in the plugin directory,
+    in a folder called docs
+    Edit your includes/config.php and add it to your $plugins list, and you are rolling
+
+----[ Possible Bugs?
+
+    If you figure out this problem, let me know!!!
+
+----[ Future Changes
+
+    Got any ideas or complaints, please e-mail me!
+
+----[ Changelog
+
+    --- SVN ---
+    bug: Use Adodb's Sanitize function for titles
+
+    --- 0.4 ---
+    feature: Allow documents to be viewed from web site on docs tab
+    feature: Allow uses to upload documents to the database and store in mysql
+    bug: Fix issues in IE6 with undefined objects
+    bug: Fix issue where realms can be damaged when upgrading
+    bug: Correct MCE Editor Visual Issues
+    bug: Correct Numerous W3C Validation Issues
+    compat: Allow proper navigation text generation
+    feature: Support for Ugroup Plugin
+
+    --- 0.2 ---
+    feature: Make the text box dynamic with the page
+
+    --- 0.1 ---
+    Initial release

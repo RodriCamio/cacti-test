@@ -1,0 +1,169 @@
+diff -Nabur cacti-0.8.8b_org/cacti088b.patch cacti-0.8.8b_patched/cacti088b.patch
+--- cacti-0.8.8b_org/cacti088b.patch	1970-01-01 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/cacti088b.patch	2014-01-12 08:13:00.000000000 +0000
+@@ -0,0 +1,84 @@
++diff -Nabur cacti-0.8.8b_org/data_sources.php cacti-0.8.8b_patched/data_sources.php
++--- cacti-0.8.8b_org/data_sources.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/data_sources.php	2014-01-10 00:00:00.000000000 +0000
++@@ -409,6 +409,9 @@
++ 		} else {
++ 			api_plugin_hook_function('data_source_action_execute', $_POST['drp_action']);
++ 		}
+++
+++		api_plugin_hook_function('data_source_action_bottom', array($_POST['drp_action'], $selected_items));
+++
++ 		header("Location: data_sources.php");
++ 		exit;
++ 	}
++diff -Nabur cacti-0.8.8b_org/graphs.php cacti-0.8.8b_patched/graphs.php
++--- cacti-0.8.8b_org/graphs.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/graphs.php	2014-01-10 00:00:00.000000000 +0000
++@@ -367,6 +367,7 @@
++ 		} else {
++ 			api_plugin_hook_function('graphs_action_execute', $_POST['drp_action']);
++ 		}
+++		api_plugin_hook_function('graphs_action_bottom', array($_POST['drp_action'], $selected_items));
++ 
++ 		header("Location: graphs.php");
++ 		exit;
++diff -Nabur cacti-0.8.8b_org/host.php cacti-0.8.8b_patched/host.php
++--- cacti-0.8.8b_org/host.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/host.php	2014-01-10 00:00:00.000000000 +0000
++@@ -324,6 +324,8 @@
++ 			api_plugin_hook_function('device_action_execute', $_POST['drp_action']);
++ 		}
++ 
+++		api_plugin_hook_function('device_action_bottom', array($_POST['drp_action'], $selected_items));
+++
++ 		header("Location: host.php");
++ 		exit;
++ 	}
++diff -Nabur cacti-0.8.8b_org/include/plugins.php cacti-0.8.8b_patched/include/plugins.php
++--- cacti-0.8.8b_org/include/plugins.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/include/plugins.php	2014-01-10 00:00:00.000000000 +0000
++@@ -7,7 +7,7 @@
++ 
++ global $plugin_hooks, $plugins_system, $plugins;
++ $plugin_hooks = array();
++-$plugins_system = array('settings', 'boost', 'dsstats');
+++$plugins_system = array('snmpagent', 'settings', 'boost', 'dsstats');
++ 
++ function use_plugin ($name) {
++ 	global $config;
++diff -Nabur cacti-0.8.8b_org/lib/functions.php cacti-0.8.8b_patched/lib/functions.php
++--- cacti-0.8.8b_org/lib/functions.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/lib/functions.php	2014-01-10 00:00:00.000000000 +0000
++@@ -880,6 +880,8 @@
++ 		failed_polls = '" . $hosts[$host_id]["failed_polls"] . "',
++ 		availability = '" . $hosts[$host_id]["availability"] . "'
++ 		where hostname = '" . $hosts[$host_id]["hostname"] . "'");
+++
+++	api_plugin_hook_function('host_status_update', array("host_id" => $host_id, "host_data" => $hosts[$host_id]));
++ }
++ 
++ /* strip_quotes - Strip single and double quotes from a string
++diff -Nabur cacti-0.8.8b_org/poller.php cacti-0.8.8b_patched/poller.php
++--- cacti-0.8.8b_org/poller.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/poller.php	2014-01-10 00:00:00.000000000 +0000
++@@ -489,6 +489,8 @@
++ 
++ 	/* insert poller stats into the settings table */
++ 	db_execute("REPLACE INTO settings (name,value) VALUES ('stats_poller','$cacti_stats')");
+++
+++	api_plugin_hook_function('cacti_stats_update', array( round($loop_end-$loop_start,4), $method, $concurrent_processes, $max_threads, $num_hosts, $hosts_per_process, $num_polling_items, $rrds_processed));
++ }
++ 
++ function display_help() {
++diff -Nabur cacti-0.8.8b_org/settings.php cacti-0.8.8b_patched/settings.php
++--- cacti-0.8.8b_org/settings.php	2013-08-07 00:00:00.000000000 +0000
+++++ cacti-0.8.8b_patched/settings.php	2014-01-10 00:00:00.000000000 +0000
++@@ -67,7 +67,7 @@
++ 			db_execute("replace into settings (name,value) values ('$field_name', $value)");
++ 		}
++ 	}
++-
+++	api_plugin_hook_function('global_settings_update');
++ 	raise_message(1);
++ 
++ 	/* reset local settings cache so the user sees the new settings */
+diff -Nabur cacti-0.8.8b_org/data_sources.php cacti-0.8.8b_patched/data_sources.php
+--- cacti-0.8.8b_org/data_sources.php	2013-08-06 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/data_sources.php	2014-01-12 08:13:00.000000000 +0000
+@@ -409,6 +409,9 @@
+ 		} else {
+ 			api_plugin_hook_function('data_source_action_execute', $_POST['drp_action']);
+ 		}
++
++		api_plugin_hook_function('data_source_action_bottom', array($_POST['drp_action'], $selected_items));
++
+ 		header("Location: data_sources.php");
+ 		exit;
+ 	}
+diff -Nabur cacti-0.8.8b_org/graphs.php cacti-0.8.8b_patched/graphs.php
+--- cacti-0.8.8b_org/graphs.php	2013-08-06 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/graphs.php	2014-01-12 08:13:00.000000000 +0000
+@@ -367,6 +367,7 @@
+ 		} else {
+ 			api_plugin_hook_function('graphs_action_execute', $_POST['drp_action']);
+ 		}
++		api_plugin_hook_function('graphs_action_bottom', array($_POST['drp_action'], $selected_items));
+ 
+ 		header("Location: graphs.php");
+ 		exit;
+diff -Nabur cacti-0.8.8b_org/host.php cacti-0.8.8b_patched/host.php
+--- cacti-0.8.8b_org/host.php	2013-08-06 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/host.php	2014-01-12 08:13:00.000000000 +0000
+@@ -324,6 +324,8 @@
+ 			api_plugin_hook_function('device_action_execute', $_POST['drp_action']);
+ 		}
+ 
++		api_plugin_hook_function('device_action_bottom', array($_POST['drp_action'], $selected_items));
++
+ 		header("Location: host.php");
+ 		exit;
+ 	}
+diff -Nabur cacti-0.8.8b_org/include/plugins.php cacti-0.8.8b_patched/include/plugins.php
+--- cacti-0.8.8b_org/include/plugins.php	2013-08-06 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/include/plugins.php	2014-01-12 08:13:00.000000000 +0000
+@@ -7,7 +7,7 @@
+ 
+ global $plugin_hooks, $plugins_system, $plugins;
+ $plugin_hooks = array();
+-$plugins_system = array('settings', 'boost', 'dsstats');
++$plugins_system = array('snmpagent', 'settings', 'boost', 'dsstats');
+ 
+ function use_plugin ($name) {
+ 	global $config;
+diff -Nabur cacti-0.8.8b_org/poller.php cacti-0.8.8b_patched/poller.php
+--- cacti-0.8.8b_org/poller.php	2013-08-06 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/poller.php	2014-02-08 14:53:00.000000000 +0000
+@@ -388,7 +388,7 @@
+ 				/* end the process if the runtime exceeds MAX_POLLER_RUNTIME */
+ 				if (($poller_start + MAX_POLLER_RUNTIME) < time()) {
+ 					cacti_log("Maximum runtime of " . MAX_POLLER_RUNTIME . " seconds exceeded. Exiting.", true, "POLLER");
+-
++					api_plugin_hook('poller_exiting');
+ 					log_cacti_stats($loop_start, $method, $concurrent_processes, $max_threads,
+ 						sizeof($polling_hosts), $hosts_per_process, $num_polling_items, $rrds_processed);
+ 
+@@ -489,6 +489,8 @@
+ 
+ 	/* insert poller stats into the settings table */
+ 	db_execute("REPLACE INTO settings (name,value) VALUES ('stats_poller','$cacti_stats')");
++
++	api_plugin_hook_function('cacti_stats_update', array( round($loop_end-$loop_start,4), $method, $concurrent_processes, $max_threads, $num_hosts, $hosts_per_process, $num_polling_items, $rrds_processed));
+ }
+ 
+ function display_help() {
+diff -Nabur cacti-0.8.8b_org/settings.php cacti-0.8.8b_patched/settings.php
+--- cacti-0.8.8b_org/settings.php	2013-08-06 00:00:00.000000000 +0000
++++ cacti-0.8.8b_patched/settings.php	2014-01-12 08:13:00.000000000 +0000
+@@ -67,7 +67,7 @@
+ 			db_execute("replace into settings (name,value) values ('$field_name', $value)");
+ 		}
+ 	}
+-
++	api_plugin_hook_function('global_settings_update');
+ 	raise_message(1);
+ 
+ 	/* reset local settings cache so the user sees the new settings */

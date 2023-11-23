@@ -1,0 +1,105 @@
+/*******************************************************************************
+
+    Author ......... The Cacti Group
+    Contact ........ The Cacti Group
+    Home Site ...... http://www.cacti.net
+    Program ........ Cacti Data Source Statistics Plugin
+    Version ........ 1.4
+    Purpose ........ Collects Last Values for all Cacti Data Source.  Also
+                     collects Daily, Weekly, Monthly, and Yearly Peaks and 
+                     Averages for All Cacti Data Sources
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    This plugin is designed to allow Cacti plugin developers the architecture
+    to graph a larger variety of data, as well as to support a whole new
+    class of graph types.
+    
+    From the data provided by this plugin, the following graph concepts can
+    be implented:
+    
+    1) Show top ten hosts by cpu utilization
+    2) Show the average load average for a rack of hardware
+    3) Show the most utilized set of remote access links in a city or state
+    4) Show the total network traffic in a data center
+    5) Show the average cpu temperature in a rack of equipment
+    6) Create a set of rules that define a poorly performing host and
+       display that in a dashboard
+    
+    It enables all these possibilities and more.  I will leave it to the
+    plugin developer to figure out how.  This plugin provides simply the
+    framework to extend Cacti and not the GUI that makes managers happy.
+
+----[ Features
+
+    Simply, Tracks Average and Peak values for all Data Sources for the
+    following time periods:
+    
+    Hourly, Daily, Weekly, Monthly, Yearly
+    
+    If only maintains the current average, you still need to goto the 
+    RRDFile, or the graph, if you wish to see anything other than
+    last.
+    
+----[ Prerequisites
+
+    Before you install DSStats, you need to have met the following pre-requisites:
+
+    1) Cacti 0.8.7e and above.
+    2) Cacti Plugin Architecture v2.4
+    3) MySQL 5.0 or above.  Versions of MySQL less than 5.0 are not supported.
+    4) Have quite a bit of system memory available to hold your memory resident
+       database.
+    5) If running Boost, you must be at Boost 2.5 or above.
+
+----[ Installation
+
+    Install is similar to other plugins with the following notes:
+
+    1) untar files into the Plugins directory like any other
+       Cacti plugin.
+    2) Check permissions, the tar file was made on Windows.
+    3) Goto Plugin Management and Install the Plugin
+    4) Goto Settings and Make sure you are famiar with how it works.
+    5) Go back to Plugin Management and Enable the Plugin.
+    6) Write your extensions to Cacti to utilize this data.
+
+----[ Additional Help?
+
+    If you need additional help, please goto forums.cacti.net.
+
+----[ Possible Bugs?
+
+    If you figure out this problem, let me know!!!
+
+----[ Special Thanks
+
+    The Cacti Community that drives us to achieve more every day.
+    
+----[ Future Changes
+
+    Got any ideas or complaints, please see the forums
+
+----[ Changelog
+    --- 1.4 ---
+    compat: Allow less memory to be reserved to comply with new modules in php5.3
+
+    --- 1.3 ---
+    feature: Support upto 62 Data Sources in an RRDfile
+    compat: Don't override Cacti log level
+
+    --- 1.2 ---
+    compat: Make the error handler not require PHP 5.2
+    compat: Remove PIA 1.x support
+
+    --- 1.1 ---
+    Feature: Enhanced to allow all previous last values to be stored for use by other plugins.
+
+    --- 1.0 ---
+    Initial release
+
+    --- Known Issues ---
+    None reported

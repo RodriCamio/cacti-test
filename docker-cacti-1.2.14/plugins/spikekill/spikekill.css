@@ -1,0 +1,89 @@
+/* main styles */
+.spikekill_header {	color: #FFFFFF;
+	border:1px solid #6D88AD;
+	background-color:#6D88AD;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+	cursor:pointer;
+}
+
+.spikekill_header tr td {
+	color: #FFFFFF;
+	border:1px solid #6D88AD;
+	padding:2px;
+	background-color:#6D88AD;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.spikekill_data {
+	color: #FFFFFF;
+	border:1px solid #6D88AD;
+	padding:2px;
+	background-color:#6D88AD;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.spikekill_data tr th {
+	color: #FFFFFF;
+	text-align:left;
+	border:1px solid #555555;
+	padding:4px;
+	background-color:#6D88AD;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 12px;
+	width:100%;
+}
+
+.spikekill_data tr td {
+	color: #000000;
+	border:1px solid #555555;
+	padding:4px;
+	white-space:nowrap;
+	background-color: #FFFFFF;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 12px;
+	width:100%;
+}
+
+.spikekill {	color: #000000;
+	background-color: #FFFFFF;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.spikekill tr {	color: #000000;
+	background-color: #FFFFFF;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.spikekill td {	color: #000000;
+	background-color: #FFFFFF;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.spikekill a {
+	text-decoration: none;
+	white-space:nowrap;
+	padding:2px;
+	display:block;
+	color: #000000;
+	background-color: #FFFFFF;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.spikekill a:hover {
+	text-decoration: none;
+	white-space:nowrap;
+	padding:2px;
+	display:block;
+	color: #000000;
+	background-color: #EAEAEA;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 10px;
+}

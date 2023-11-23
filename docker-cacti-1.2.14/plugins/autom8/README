@@ -1,0 +1,243 @@
+/*******************************************************************************
+
+    Author ......... Reinhard Scheck
+    Contact ........ gandalf@cacti.net
+    Home Site ...... http://www.cacti.net
+    Program ........ Cacti Automation
+    Version ........ 0.36
+    Purpose ........ Perform Rule based Automation Tasks
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    This plugins allows you to define Rules and to apply them to specific
+    automation tasks, e.g. automatically create graphs.
+
+----[ Features
+
+    1) Define Rules based on existing Data Queries
+    2) Apply Rules to either
+       - a (list of) Host(s)
+         matches all listed hosts
+       - a (list of) Host Template(s)
+         matches all hosts matching one of the listed Host Templates
+       If neither a Host nor a Host Template is associated, the rule will be of no effect!
+    3) Rules are executed in following cases:
+       - a cli script is called (e.g. add_device.php, add_graph.php, ...)
+       - a Re-Index is performed on a Data Query. This includes poller_reindex_hosts.php
+       - A new Host is created. 
+         In this case, Rules for _ALL_ associated Data Queries are executed
+         one after the other
+    4) Simple Graph Templates will be evaluated to create those graphs in any event.
+
+----[ Prerequisites
+
+    Before you install AUTOM8, you need to have met the following pre-requisites:
+
+    1) Cacti 0.8.7x using Plugin Architecture V2.x. Tested using PIA 2.4
+    2) Install all patches provided with this plugin:
+       - cli.patch
+       - lib_api_automation_tools.php.patch
+       - lib_api_tree.php.patch
+       - host.php.patch
+       - lib_api_device.php.patch
+       - lib_data_query.php.patch
+       To do so, please go to main Cacti directory. Then, please run
+         patch -p1 -N --dry-run < plugins/autom8/cli.patch
+       If everything looks fine, omit the --dry-run
+         patch -p1 -N < plugins/autom8/cli.patch
+       Do this for all patch files.
+       
+       ATTENTION!!!
+       The patches have been incorporated into PIA since v2.9.
+
+----[ Installation
+
+    Install is similar to other plugins. Please refer to the documentation of
+    Plugin Architecture, as PIA V2.x handles installation in a different way.
+
+----[ Usage
+
+    This plugin comes with some predefined rules which are deactivated. In order
+    to make the work, visit "Rules", select them and check the "Activate" checkbox.
+    
+    You may define more rules at your will.
+    
+    It is possible to define more than one Rule for a single Data Query. Learn how multiple
+    Rules are executed:
+    - fetch all Rules for the given Data Query that are
+      - activated and either
+      - associated to the host directly
+      - associated to the host via the Host Template (preferred method) 
+    
+    Thus, if you e.g. define a Traffic Rule for 64bit graphs matching a certain Host Template
+    _AND_ a generic Traffic Rule for 32bit graphs related to this Host, you
+    will get both 32bit and 64bit graphs.
+    
+    Currently, the plugin is quite verbose when creating graphs.
+
+----[ Additional Help?
+
+    If you need additional help, please goto forums.cacti.net.
+
+----[ Possible Bugs?
+
+    If you figure out this problem, let me know!!!
+
+----[ Special Thanks
+
+	All this would not have been possible without the cacti core development team
+	and the work of cigamit, who created the Plugin Architecture for cacti.
+
+----[ Future Changes
+
+	- Rules for deleting graphs/data sources/tree entries/permissions
+	- Permission Rules (I don't like those)
+	- AJAX-ification, jQuery-fication etc. to match new 088-style coding
+	- use snmpget/script to add a rule item that will hit the target while evaluating the rule
+	- Allow for additional "online" test via snmp/script for matching and tree rules
+
+----[ Changelog
+   --- SVN ---
+    
+   --- 0.36 ---
+    - fix:     catch errors in case no datasource is created for a broken graph
+    - fix:     use valid color names to lowlight existing graphs
+    
+   --- 0.35 ---
+    - fix:     change input type='image' to 'button'
+    - fix:     some html issues
+    - fix:     remove unnecessary SQL
+    - fix:     fix handling of graph items and trees (courtesy David Koski)
+    - fix:     JS code for tree rule items added to handle closing bracket like graph rule items
+    - compat:  all required patches for Cacti 087g aggregated in a single patch file
+    - feature: allow "( ... ) AND/OR ( ... )"
+               empty fields, operators and patterns
+    
+   --- 0.34 ---
+    - fix:     better upgrade procedure
+    - fix:     unwanted empty list item removed from confirmation screen
+    - feature: logging level for AUTOM8 logging under "Settings -> Misc"
+    - feature: new filter "NOT REGEXP"
+    
+   --- 0.33 ---
+    - fix:     index errors (thanks terziyski)
+    - fix:     no "propagation" flag allowed for host/graph tree items, index error fixed
+    - fix:     remove deprecated php function calls
+    - fix:     html formatting errors fixed
+    - fix:     renaming function calls to make them unique 
+
+   --- 0.32 ---
+    - fix:     Some missing includes fixed for logging
+    - fix:     fix to broken SQL statement
+    - fix:     filter string was not persistent
+
+    --- 0.31 ---
+    - fix:     Move all patches to a cacti-version-dependant sub-directory
+               Add patches for 087e             
+    - fix:     sql fix for create_dq_graphs (courtesy: brylant)
+    - fix:     creating tree entries for graphs fixed (coutesy: grazog)
+    - fix:     Tree Rule Items moveup/down fixed
+    - feature: logging for adding objects (howie): tracing is flagged with AUTOM8 TRACE (to be removed later)
+               AUTOM8 TRACE is logged at POLLER_VERBOSITY_MEDIUM and higher
+               adding objects is flagged AUTOM8 and always logged
+                   
+    --- 0.30 ---
+    - feature: MySQL regexp support for Host Matching Rules and Graph Creation Rules
+	- feature: restructure tables - matching rules have their own tables now
+    
+    --- 0.26 ---
+	- fix:     Serialization bug broke Rule Copy
+	- fix:     Nested html form (uhm) broke highlighting of selected lines
+	 
+    --- 0.25 ---
+    - feature: Tree Rules without "Create Tree Items" now allowed
+               Makes sense when directly hooking into a (sub-)tree
+    - feature: Tree Rules on graphs (were still missing)
+    - fix:     logging a query field which does not exist (propagate_changes) in this table
+    - fix:     SQL OR Rules always need parenthesis
+    - fix:     Page Navigation for Tree Rule Items "Matching Items"
+    - fix:     HTML validation; but unfortunately, some cacti utility functions break HTML validation
+    - fix:     Tree Rule Items: take sequence into account when generating new tree entries
+    - fix:     Duplicate Tree Rule: correctly mask regexp special characters
+    
+    --- 0.24 ---
+    - feature: normalizing cacti_log messages to show up the host for better use with cacti online log viewer
+    - feature: row count and status filter for graph and tree rules list
+    - feature: mass-enable/disable of graph/tree rules
+    - tweak:   moved "status" column of "Eligible Hosts" list to a better psoition
+    - fix:     corrected parenthesis for complex SQL statement
+    - fix:     don't show "Show Matching Graphs" for Graph Rules unless "Graph Type" has been saved
+               to avoid false display of graphs that have already been created
+    - fix:     Data Query display of new graphs now starts at page1 if #rows < rows_per_page*#page
+    - fix:     cope with non-existend XML index_order_type
+    - fix:     when right parenthesis selected on host match rule, disable all other rule item fields
+
+    --- 0.23 ---
+    - feature: speed-up by excluding existing graphs from list of associated graphs
+    - fix:     changing tree for new tree rules now accepted
+    - fix:     Tree Rule item moveup/down and delete were acting on the wrong table (sigh; again!)
+    - fix:     remove leading empty line of api_automation_tools.php during patch
+               This seems to break some backlevel PHP installations; PHP 5.2.9 was fine
+               CAUTION: file lib_api_automation_tools.php.patch updated!
+    - fix:     cli device import fails due to missing include of lib/api_tree.php
+
+    --- 0.22 ---
+    - fix:     2nd Tree Rule was missing the related tree items (default table setup)
+    - fix:     Tree Rule item moveup/down and delete were acting on the wrong table
+    - fix:     deleted an unwanted module (relict of an old copy)
+
+    --- 0.21 ---
+    - fix:     graph creation was only checking for the graph template
+               now it works based on data_local like "greying out" feature does
+    - fix:     lib/template.php hook was missing a specific field
+    - fix:     page fwd/bwd separated for host/graph/tree list
+    - feature: add colored host status to "Show Matching Graphs"
+
+    --- 0.20 ---
+    - feature: reworked filtering for "matching objects"
+    - feature: add tree rules
+    - feature: duplicate rules
+    - feature: global rule enable/disable checkbox eases testing
+    
+    --- 0.16 ---
+    - feature: Associate a rule with a list of Host Templates
+               and/or a list of Hosts instead of a single one.
+               Breaks current table layout = you'll have to redo it!
+               IMPORTANT!!!
+               You MUST list host(s) and/or host template(s) for a match now!
+    - feature: Rule display will show existing graphs. This may be deactivated            
+
+    --- 0.15 ---
+	- feature: drop table plugin_autom8_dq_fields ->
+	  on each rule_item edit operation
+	  create array of data query input items dynamically
+	  this now allows automatic inclusion of new data queries
+	- bug fix: cope with uncompletely added data queries (without valid xml file)
+
+    --- 0.14 ---
+	- major rework of autom8_rules (rule edit)
+	- split off some "api" functions to cleanup code (autom8_utilities.php), 
+	  later move to cacti/main?
+	- bug fix: Data Query pagination now starts on page 1 when editing a rule
+	- bug fix: if items are present, changes to rule parameters may now be saved successfully
+
+    --- 0.13 ---
+	- new "Apply Autom8 Rules" action in action drop-down at host.php
+
+    --- 0.12 ---
+    - more bug fixes
+    - cleanup of api_tree_item_save just like 088 will work
+    - provide two default rules that are not activated
+
+    --- 0.11 ---
+    - some bug fixes
+    - "enabled" checkbox for rules
+    
+    --- 0.1 ---
+    Initial release:
+    - Graph Creation Rules
+    - Rule Preview
+    - Hooks for cli, host and reindex

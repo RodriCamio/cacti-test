@@ -1,0 +1,39 @@
+/*******************************************************************************
+
+    Author ......... The Cacti Group 
+    Home Site ...... http://www.cacti.net
+    Program ........ Remote Console Utility Plugin for Cacti
+    Version ........ 0.1
+    Purpose ........ Connect to a host using either SSH or Telnet
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    This plugin is designed to be a utility plugin for other plugins that provides
+    both Telnet and SSH access for remote hosts.
+
+----[ Features
+
+    Allows specification of background color, foreground color, font size, window
+    size.  It provides two hooks to include in your plugin for providing a link
+    and an action icon.
+
+----[ Installation
+
+    Install just like any other plugin from Plugin Management
+
+----[ Possible Bugs?
+   
+    If you find a problem, please goto the Cacti Forums for additional support
+
+----[ Future Changes
+    
+    No plans
+
+----[ Changelog
+
+    --- 0.1 ---
+    Initial release
+     

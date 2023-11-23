@@ -1,0 +1,51 @@
+/*******************************************************************************
+
+    Author ......... Jimmy Conner
+    Contact ........ jimmy@sqmail.org
+    Home Site ...... http://cactiusers.org
+    Program ........ Secure Passwords
+
+*******************************************************************************/
+
+----[ Purpose
+
+	Adds settings to ensure password complexity requirements are met
+
+----[ Features
+
+	Minimum Password Length
+	Require Numerical Characters
+	Require Mixed Case
+	Require Special Characters
+	Option to force complexity upon old passwords (upon login)
+	Expire Passwords after X days
+	Disabling Inactive Accounts after X days
+	Password History
+	Account Locking after X failed attempts
+	Auto Unlocked after X minutes
+
+----[ Installation
+
+	Plugin is Plugin Architecture 2.0 only compatible
+	To install, place it in your plugin directory in a folder called "secpass"
+	Then login to Cacti, goto Plugin Management and click "Install" next to the plugin's name
+
+	You can then edit the text under Settings >> "Authenication" tab >> Complexity Requirements
+    
+----[ Possible Bugs?
+   
+	If you find a problem, let me know!!!
+	http://cactiusers.org/bugs/ 
+
+----[ Future Changes
+
+	Got any ideas or complaints, please e-mail me!
+
+----[ Changelog
+	--- 0.2 ---
+		Account Locking after X failed attempts
+		Auto Unlocked after X minutes
+
+	--- 0.1 ---
+		Initial release
+     

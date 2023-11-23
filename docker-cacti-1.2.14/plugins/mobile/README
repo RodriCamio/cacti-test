@@ -1,0 +1,49 @@
+/*******************************************************************************
+
+    Author ......... Jimmy Conner
+    Contact ........ jimmy@sqmail.org
+    Home Site ...... http://cactiusers.org
+    Program ........ Cacti Mobile
+    Version ........ 0.1
+    Purpose ........ A simple display to see down hosts and alerts from your mobile device
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    This plugin allows will redirect any mobile web browser to a page
+    showing all currently down hosts and breached thresholds
+
+----[ Features
+
+    Tested with IPhone, Blackberry, and Opera Mini, but supports many more!
+
+----[ Installation
+
+    First, make sure you have the plugin architecture installed.
+
+    http://cactiusers.org/wiki/PluginArchitectureInstall
+
+    Install just like any other plugin, just throw it in the plugin directory,
+    in a folder called mobile.
+    Edit your includes/config.php and add it to your $plugins list, and you are rolling
+
+    http://cactiusers.org/wiki/PluginsInstall
+
+   
+----[ Possible Bugs?
+   
+    If you find problem, let me know!!!
+
+
+----[ Future Changes
+    
+    Authentication (user account or simple password)
+    Got any ideas or complaints, please e-mail me!
+
+----[ Changelog
+
+	--- 0.1 ---
+		Initial release
+

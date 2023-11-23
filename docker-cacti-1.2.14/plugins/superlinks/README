@@ -1,0 +1,147 @@
+SuperLinks 1.4
+===============
+
+   By Howard Jones, October 14th 2008 - howie@thingy.com
+   http://wotsit.thingy.com/haj/cacti/
+
+----[ Purpose
+
+   This plugin is an extension of my Links plugin with some important new features:
+     * It supports ANY number of extra tabs
+     * It will dynamically create the Tab graphics as pages are created
+     * It has the same user-based access-control as Weathermap
+     * It allows you to add new links to the Console menu as well as tabs
+       and also blocks of content to the 'Welcome' front page.
+     * Allows you to directly embed another website/application without writing any HTML
+
+----[ Installation
+
+   Just as any other Cacti plugin - unzip into your plugins folder, and Install and
+   Enable from Plugin Management.
+
+   Make sure that the plugins/superlinks/content directory is writable by your
+   webserver user. The SuperLinks management page will warn you if this is
+   not correct.
+
+   NOTE: SuperLinks also requires the 'gd' php module and the related GD library (or DLL).
+   It also requires that GD was built with PNG support and Freetype support.
+
+----[ Directions
+
+   Go into Cacti's User Management and give yourself permission to Manage and View SuperLinks Pages.
+
+   Copy some HTML fragments into the plugins/superlinks/content/ directory
+
+   Go to Cacti's Console menu, and Management..SuperLinks Pages
+
+   Choose Add, and then pick a file from the content/ list. You can then choose the name of the
+   Tab or Menu Item, and which of those it will be.
+
+   Click on the username in the 'Acccesible By' column to change which users are allowed to see
+   this particular page. Tabs will disappear for other users.
+
+----[ Notes
+
+   The files in content/ should NOT be complete HTML files - they should have no HEAD or BODY tags.
+   Only the stuff that would normally appear inside <body>.  There are 3 example files in the 
+   directory already.
+
+----[ License
+
+   See COPYING for the license under which SuperLinks is released (short version - it's GPLed).
+
+   This plugin includes one icon from Mark James's excellent Silk icon set. These are released under
+   under a Creative Commons Attribution 2.5 License. The full icon set is available at
+   http://www.famfamfam.com/lab/icons/silk/
+
+   The supplied DejaVu Fonts are copyright Bitstream, with some additional glyphs copyright Tavmjung Bah.
+
+   DejaVu changes are in public domain. For more information see:
+   http://dejavu.sourceforge.net/wiki/index.php/License
+
+   The fantastic jQuery library is also included, which is released under the GPL.
+   http://docs.jquery.com/License
+
+----[ Possible Bugs?
+   
+    If you figure out this problem, let me know!!!
+
+----[ Future Changes
+    
+    Got any ideas or complaints, please e-mail me!
+
+----[ Changelog
+  --- 1.4 ---
+  bug: Change TYPE references to ENGINE for MySQL 5.1+
+  bug: A few formating issues with older browsers
+  bug: Disabled console items should not be shown
+  bug: Resolve jQuery Issues with Console Items
+
+  --- 1.3 ---
+  bug: Correct a single SQL Syntax issue
+
+  --- 1.2 ---
+  feature: Allow superlinks to be disabled
+  bug: Remove some ambiguous references to maps vs pages
+  feature: Make UI more Cacti Like
+  feature: Allow Pages to be Sorted, Filtered
+
+  --- 1.0 ---
+  bug: Fixed issues with Window sizing introduced by more recent cacti versions
+  bug: Fix Shrinking so that you don't have to use the 'force' option
+  feature: Made only PIA 2.x compliant
+  note: Code cleanup
+
+  --- 0.8 ---
+  bug: Fixed LOGINBEFORE so it works (bodged - LOGINBEFOR doesn't overflow 10 chars)
+  feature: Added option in Settings to hide the Login Screen logo, to make a branding easier.
+  feature: Modified to work with Cacti PA 2.x (should still work in older ones too)
+  feature: Added support for multiple console menu sections
+  feature: Added an example for Loginbefore/Loginafter to demo the branding stuff
+  feature: Added option to try and hide the '3 things you can do' stuff on the console via CSS (for branding too)
+
+  --- 0.72 ---
+  bug: CONSOLE links showed up when they shouldn't have (contents were still denied)
+  feature: Moved the 'Extra' console menu above Settings.
+  feature: Allow longer URLs than 60 chars (thanks to prune for pointing this out)
+  feature: Added support for the small tabs need by streaker69's cacti patches
+  feature: Added a setting to allow you to switch tab size (see above)
+  feature: Added support for blocks before and after the login box
+  feature: Added some more examples (whohas.php and wmap-example.php)
+
+  --- 0.72 ---
+  bug: Fixed a typo in the IFRAME stuff, so including a web URL works now.
+  feature: Added in support for IFRAMEs on the FRONT option. Just cos. It's pretty ugly.
+  bug: Fix for Ubuntu/Debian failing to load fonts (thanks to corym)
+
+  --- 0.7 ---
+  feature: Allow arbitrary html content to be added to the any Superlink (thanks to TheWitness)
+  feature: When a Superlink is selected to be a console selection, include the console (and again)
+  feature: Remove the "Console->" link from the Cacti Navigation for tabs (and again!)
+  feature: Rename the Superlinks navagation item to the Superlink title when displayed (and AGAIN)
+
+  --- 0.6 ---
+  bug: Some fixes for incompatible changes in Cacti 0.8.7
+  bug: Fixed the zip so you don't need to rename the directory. Sorry about that.
+  bug: Fixed some UI bugs so that the page title appears in the management pages.
+  feature: Added a 'FRONT' option that appears on the 'three basic steps' page - make-your-own-MOTD?
+  feature: Added a new sample content page that pulls data from the Docs plugin. El-Cheapo CMS!
+  feature: Allow 'guest' account access to superlinks pages (if you give that user access)
+
+  --- 0.5 ---
+  bug: Fix for another (pretty obscure) mysql issue if your database name has a '-' in it.
+  feature: Added explicit license statement.
+
+  --- 0.4 ---
+  feature: Switched from Vera to DejaVu for fonts. Added some automatic text-scaling/layout code.
+  feature: Added checks for the relevant PHP module support.
+
+  --- 0.3 ---
+  bug: Fixes for strict mysql mode. Fix for console menu errors. 
+  feature: unique tab image filenames to avoid browser caching issues.
+
+  --- 0.2 ---
+  feature: Added: red tab for 'current' page. Small fix for Cacti permissions.
+
+  --- 0.1 ---
+  Initial Release

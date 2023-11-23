@@ -1,0 +1,33 @@
+diff -Nabur cacti-0.8.7d/cli/add_graph_template.php plugin087d/cli/add_graph_template.php
+--- cacti-0.8.7d/cli/add_graph_template.php	2009-02-12 03:55:46.000000000 +0100
++++ plugin087d/cli/add_graph_template.php	2009-05-17 13:49:03.000000000 +0200
+@@ -144,6 +145,7 @@
+ 		exit(1);
+ 	}else{
+ 		db_execute("replace into host_graph (host_id,graph_template_id) values (" . $host_id . "," . $graph_template_id . ")");
++		api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $host_id, "graph_template_id" => $graph_template_id));
+ 	}
+ 
+ 	if (is_error_message()) {
+diff -Nabur cacti-0.8.7d/cli/add_tree.php plugin087d/cli/add_tree.php
+--- cacti-0.8.7d/cli/add_tree.php	2009-02-12 03:55:46.000000000 +0100
++++ plugin087d/cli/add_tree.php	2009-06-01 14:48:44.000000000 +0200
+@@ -32,6 +32,7 @@
+ 
+ include(dirname(__FILE__)."/../include/global.php");
+ include_once($config["base_path"]."/lib/api_automation_tools.php");
++include_once($config["base_path"].'/lib/api_tree.php');
+ include_once($config["base_path"].'/lib/tree.php');
+ 
+ /* process calling arguments */
+diff -Nabur cacti-0.8.7d/cli/host_update_template.php plugin087d/cli/host_update_template.php
+--- cacti-0.8.7d/cli/host_update_template.php	2009-02-12 03:55:46.000000000 +0100
++++ plugin087d/cli/host_update_template.php	2009-05-16 11:48:42.000000000 +0200
+@@ -137,6 +137,7 @@
+ 
+ 			foreach ($graph_templates as $graph_template) {
+ 				db_execute("REPLACE INTO host_graph (host_id, graph_template_id) VALUES (" . $host["id"] . ", " . $graph_template["graph_template_id"] . ")");
++				api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $host_id, "graph_template_id" => $graph_template["graph_template_id"]));
+ 			}
+ 		}
+ 	}

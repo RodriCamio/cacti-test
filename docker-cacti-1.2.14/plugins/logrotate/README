@@ -1,0 +1,40 @@
+/*******************************************************************************
+
+    Author ......... Jimmy Conner
+    Contact ........ jimmy@sqmail.org
+    Home Site ...... http://cacti.net
+    Program ........ Log Rotation
+
+*******************************************************************************/
+
+----[ Purpose
+
+	Adds settings to allow the rotation of the cacti.log
+
+----[ Features
+
+	Enable / Disable
+	Set number of days to retain old logs
+
+----[ Installation
+
+	Plugin is Plugin Architecture 2.0 only compatible
+	To install, place it in your plugin directory in a folder called "logrotate"
+	Then login to Cacti, goto Plugin Management and click "Install" next to the plugin's name
+
+	You can then edit the text under Settings >> "Poller" tab
+    
+----[ Possible Bugs?
+   
+	If you find a problem, let me know!!!
+	http://bugs.cacti.net
+
+----[ Future Changes
+
+	Got any ideas or complaints, please e-mail me!
+
+----[ Changelog
+
+	--- 0.1 ---
+		Initial release
+     

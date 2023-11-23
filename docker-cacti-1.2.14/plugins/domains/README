@@ -1,0 +1,55 @@
+/*******************************************************************************
+
+    Author ......... The Cacti Group
+    Contact ........ 
+    Home Site ...... http://www.cacti.net
+    Program ........ Cacti Multiple Domains Plugin
+    Version ........ 0.1
+    Purpose ........ To Allow Support for Multiple LDAP/AD Domains in Cacti
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    Currently, there is only support for one LDAP domain in Cacti.  This plugins
+    purpose is to extend that.
+
+----[ Features
+
+    Allow administrators to add additional user login domains
+
+----[ Prerequisites
+
+    Cacti PIA 2.8++, Cacti 0.8.7g++
+
+----[ Installation
+
+    Simply place in the plugins directory and install like any other PIA 2.x
+    plugin.
+
+----[ Additional Help?
+
+    If you need additional help, please goto forums.cacti.net.
+
+----[ Possible Bugs?
+
+    If you figure out this problem, let me know!!!
+
+----[ Special Thanks
+
+    Jimmy Conner (cigamit) - For bringing the plugin architecture to
+    the world of Cacti and provding continual support of my development
+    efforts.
+
+----[ Future Changes
+
+    Got any ideas or complaints, see the forums or a phychologist
+
+----[ Changelog
+
+    --- 0.2 ---
+    Minor change to allow methods to display
+
+    --- 0.1 ---
+    Initial release

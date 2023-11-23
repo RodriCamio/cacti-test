@@ -1,0 +1,40 @@
+/*******************************************************************************
+
+    Author ......... Jimmy Conner
+    Contact ........ jimmy@sqmail.org
+    Home Site ...... http://cactiusers.org
+    Program ........ Login Page Mod
+    Version ........ 1.0
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    Shows you how to easily change the look of the login page
+
+----[ Features
+
+    Not many
+
+----[ Installation
+
+    Install just like any other plugin, just throw it in the plugin directory,
+    in a folder called loginmod.
+    Edit your includes/config.php and add it to your $plugins list, and you are rolling
+
+   
+----[ Possible Bugs?
+   
+    If you figure out this problem, let me know!!!
+
+
+----[ Future Changes
+    
+    Got any ideas or complaints, please e-mail me!
+
+----[ Changelog
+
+	--- 1.0 ---
+		Initial release
+     

@@ -1,0 +1,292 @@
+---------------------------------------------------------------------------------------------------------------
+Version 0.8.0:
+---------------------------------------------------------------------------------------------------------------
+**Feature:       Measurand can handle text as "calculation result".
+Feature:        Allow auto-creation of emails for non-scheduled reports
+Feature:        (SF Request 3002259) Allow auto-creation of data items for non-scheduled reports
+Feature:        (SF Request 3002255) Restore settings of temporary deactivated input fields
+Bugfix(#00125): Report templates can only be created for data templates with active monitored devices
+Bugfix(#00124): Data query variables are not functional in 0.8.7g and older versions of Cacti
+Bugfix(#00123): Import of report templates fails if data template is missing
+---------------------------------------------------------------------------------------------------------------
+Version 0.7.5:
+---------------------------------------------------------------------------------------------------------------
+Feature:        Data Query Variables: List all available data query variables for use with a formula
+---------------------------------------------------------------------------------------------------------------
+Version 0.7.4:
+---------------------------------------------------------------------------------------------------------------
+Feature:        (SF Request 3017514) Number of exported reports can be limited in a Round Robin style
+Feature:        Allow to create raw data exports. (ignore result formatting)
+Bugfix(#00122): Fix issues within boost detection if plugin has not been removed completely.
+Bugfix(#00121): Remove invalid test code.
+Bugfix(#00120): Fix issues with 10G interfaces if ifHighSpeed counter is not available.
+---------------------------------------------------------------------------------------------------------------
+Version 0.7.3:
+---------------------------------------------------------------------------------------------------------------
+Feature:        (SF Request 3026234) New function f_high() returns the highest value out of bunch of given
+                parameters like measurands, variables or static values.
+                New function f_low() returns the lowest value out of a list of numbers
+Feature:        Support Boost's on demand RRD update
+Bugfix(#00119): Issues to export a report to CSV as well as Excel with IE
+Bugfix(#00118): RRDtool output "NaN" (excatly that writing style) has been converted to zero instead of NAN
+Bugfix(#00117): Unable to import report templates which are not based on Cacti's default data templates
+Bugfix(#00116): Design fails in FF due to invalid color declarations. (Thanks to Mule)
+Bugfix(#00115): Invalid formatting occured in automatical generated export files if SI-prefixes are in use
+Bugfix(#00114): Transformation of RRDtool output becomes invalid if decimal separator is not a point
+Bugfix(#00114): Debug file shows wrong memory usage information if memory limit is undefined.
+---------------------------------------------------------------------------------------------------------------
+Version 0.7.2:
+---------------------------------------------------------------------------------------------------------------
+Feature:        Extend data formatting by different data types (e.g. BIN, FLOAT, INT, HEX, OCT ) and
+                the allow to setup the precision
+Feature:        New function f_int added (thanks to patricko)
+Feature:        New function f_rnd added
+Feature:        Use real buttons instead of images
+Feature:        Add new data items up to the maximum limitation instead of aborting the auto generating process
+Feature:        Add new variable maxRRDValue and improve handling of maximum values
+Bugfix(#00113): Export file contained raw data instead of formatted results like show in the report view
+Bugfix(#00112): Search for data items failed by using an invalid SQL query
+Bugfix(#00111): Templates and reports with duplicate descriptions have been shown as only single entry in
+                different dialogues.
+Bugfix(#00110): Fix internal issue if first data source item is excluded within the template configuration
+Bugfix(#00109): Copyright updated
+---------------------------------------------------------------------------------------------------------------
+Version 0.7.1:
+---------------------------------------------------------------------------------------------------------------
+Bugfix(#00108): New contact address added to VERSION and README
+Bugfix(#00107): Javascript code missing for option new "Auto Generated Export"
+Bugfix(#00106): Include paths modified with regard to Cacti 0.8.8
+Bugfix(#00105): Modification of f_xth() to match with Cacti's results.
+Bugfix(#00104): External lib "pChart" removed
+Bugfix(#00103): Limitation of the maximum calculation runtime increased up to 9999 seconds
+Bugfix(#00102): Default decimal separator changed from ',' to '.'
+Bugfix(#00101): Calculation process will cause issues if DST change occurs
+Bugfix(#00100): Missing indexes avoid saving individual configuration of data items
+---------------------------------------------------------------------------------------------------------------
+Version 0.7.0:
+---------------------------------------------------------------------------------------------------------------
+Feature:        (SF Request 1933005) Auto export of scheduled reports to custom folder
+Feature:        Improvement of database structure avoids saving data items in separate tables
+Feature:        Auto Clean-up removes data items which do not exist any longer
+Feature:        Definition of a group title for all separate measurands will be supported
+Feature:        Export/Import function for report templates available
+Feature:        (SF Request 1997470) Data source items can be selected within a report template
+Feature:        Report templates are no longer bounded to a single consolidation function
+Feature:        Support of Plugin Architecture 2.x
+Feature:        Export format "SML" (Spreadsheet XML 2003) will be supported
+Feature:        Export to CSV, XML and SML can directly done from the report view
+Feature:        Calculation of 10 Gigabit Ethernet interfaces will be supported
+Feature:        User can define the max. number of rows for all tables shown in ReportIt
+Feature:        New arrows for sorting the tables
+Feature:        Report view: Sorted column gets a yellow background
+Bugfix(#00099): Generation of charts fails if user did not setup the default type before
+Bugfix(#00098): Invalid archives will be generated if data source name begins with a number
+Bugfix(#00097): Alternative path for saving a report archive without a slash at its end won't fit on Unix
+Bugfix(#00096): Dealing with database names containing a hyphen in failes
+Bugfix(#00095): Input field "Unit" supports not enough characters
+Bugfix(#00094): Some "chancel" buttons were missing for a better workflow
+Bugfix(#00093): Rounding does not work with negative values
+Bugfix(#00092): Time frame shown in RDDgraph is always equal to the latest reporting period
+Bugfix(#00091): Renamimg of some charts
+Bugfix(#00090): SQL issue could case invalid list of data items if graph permissions are enabled.
+---------------------------------------------------------------------------------------------------------------
+Version 0.6.1:
+---------------------------------------------------------------------------------------------------------------
+Feature:        (CLI) Debug option allows to view internal results / stati of the calculation process
+Feature:        (CLI) Report can be calculated singlarly
+Feature:        Graph type "Line (filled)" added
+Feature:        Email attachment can be disabled to send out a notification only
+Bugfix(#00089): Wrong include path in cc_graph.php
+Bugfix(#00088): Archived data source alias can't be unserialized if it contains double quotes
+Bugfix(#00087): Resolution of subhead variables is not free from errors in exported reports
+Bugfix(#00086): Incorrect definition of table "reportit_cache_variables"
+Bugfix(#00085): Report view does not support output buffering to increase packet size (for WANs)
+Bugfix(#00084): A SQL error will occur if a measurand is edited.
+Bugfix(#00083): Critical: Undefined measured values (NANs) will be interpreted as "-1" on sytems with Windows
+                if the type of connection to RRDtool is set to "RRDTOOL CACTI(SLOW)"
+Bugfix(#00082): User defined value won't be removed from database after template variable has been deleted
+Bugfix(#00081): Separators for CSV exports (sent via email) does not match user defined settings
+Bugfix(#00080): Input field for the subhead is too small
+Bugfix(#00079): Special HTML tags (<br>,<p>,<b>,<i>,<u>) are not supported in the subhead like in v0.5.1
+Bugfix(#00078): Critical: Quotes in a subhead impede to cache an archived report correctly
+Bugfix(#00077): Duplicating a report template fails
+Bugfix(#00076): Critical: Removing a report template that contains definitions of variables
+                could cause that user defined values of other variables, which are based on other templates,
+                will be removed instead
+Bugfix(#00075): Logging verbosity will be ignored
+Bugfix(#00074): If the data source alias is empty chart title won't contain the internal name
+Bugfix(#00073): Graph View: Uncomplete parameter used in a function call causes SQL errors
+Bugfix(#00072): Old field identifier inhibits that email settings can be saved
+Bugfix(#00071): Url rewriting allows to configure email settings without beeing activated
+Bugfix(#00070): An error in generating the titles for X and Y-axis causes that Bar, HBar, Line charts can fail
+Bugfix(#00069): Saved data source alias are invalid in Cacti 0.8.6, because sanitizing of SQL commands has
+                changed with Cacti 0.8.7
+Bugfix(#00068): Guest user can not view reports although permissions are correct
+---------------------------------------------------------------------------------------------------------------
+Version 0.6.0:
+---------------------------------------------------------------------------------------------------------------
+Feature:        Scheduled reports can be emailed to a defined list of recipients automatically
+Feature:        Template configuration supports the definition of an alias for every internal data source
+                description which should be displayed instead.
+Feature:        Report configuration allows to define a template to configure new data items automatically
+Feature:        Administrators (Power Users) can change the report owner
+Feature:        Additional Filter "graph permission by device" supported
+Feature:        Report configuration divided into differend segments (General, Email, Presets, Administration)
+Feature:        New graphic module based on "Graidle" (cc_graph has been completely rewritten)
+Feature:        Export format "XML" available
+Feature:        Additional information per measurand can be displayed (sum, min, max, average)
+Feature:        Filter field "Limit" added
+Feature:        New search field allows to filter the report view
+Feature:        Scheduled reports will be archived automatically
+Bugfix(#00067): Guest user has no longer access to reporting functions without the correct realm ids
+Bugfix(#00066): Changing a lot of cc_reports.php to get more compatible to Cacti's drawing functions
+Bugfix(#00065): Report View: Default setting "Public" replaced by "My reports"
+Bugfix(#00064): Caching error occurs if 2 or more measurands call the same function with
+                a parameter (only f_xth(), f_dot(), f_sot() are affected)
+Bugfix(#00063): Zack Bloom's "Advanced Graphing Class" has been replaced by "Graidle"
+Bugfix(#00062): Graph Overiew will always end at 23:59:59 instead of 24:00:00,
+                because the calculation changes nearly with every version of RRDtool
+Bugfix(#00061): CSV Export file does not contain all variables
+Bugfix(#00060): Time zone will be shown without beeing activated on a fresh installation of Cacti
+Bugfix(#00058): Security check for export process is missing
+Bugfix(#00057): Incorrect width displayed with Cacti 0.8.7 and above
+---------------------------------------------------------------------------------------------------------------
+Version 0.5.1:
+---------------------------------------------------------------------------------------------------------------
+Feature:        changemode.php modifies an existing ReportIt v0.4.x installation to support SQL strict mode
+Feature:        Active sort criterion: Arrow becomes red instead of yellow
+Feature:        Subhead configuration supports serial variables to show interface settings
+Feature:        Use of an individual filter per report view can be activated (graph settings)
+Feature:        Report View supports now:
+                -> Filtering by data sources and measurands
+                -> Enable/disable subheads (if activated in report configuration)
+                -> Enable/disable report summary
+                -> Switch to Graph View (if activated under "settings")
+                -> Limitation of rows
+Feature:        New table design with filter options and default limitation of rows
+Feature:        Active (red) tab is supported
+Feature:        User can define a default chart type
+Feature:        Graph support can be enabled/disabled
+Feature:        New system variable "nan" returns the sum of NAN's during the reporting period for all data sources
+Feature:        uninstall.php will remove all reportit tables and settings (completely rewritten)
+Feature:        New calculation function "f_last" returns the last valid measured value
+Feature:        New calculation function "f_1st" returns the first valid measured value
+Feature:        Explanation of functions and variables by using Java Script (measurand configuration)
+
+Feature:        New calculation function "f_grd" for statistical analysis (v0.4.2)
+Feature:        Formatting of dates relates to the user settings (v0.4.2)
+Feature:        Graph view relates to the reporting period (v0.4.2)
+Feature:        New reporting periods "Last Week (Mon-Sun)" and "Last Week" (Sun - Sat) added. (v0.4.2)
+
+Bugfix(#00056): Calculation results will be saved as "Double" instead of using "Float"
+Bugfix(#00055):.CLI scripts don't work with Cacti 0.8.7
+Bugfix(#00054): Validation errors allows to save an end date that lies ahead
+Bugfix(#00053): Existing CSV file causes error messages during the export to CSV if it is write-protected
+Bugfix(#00052): Invalid formula can be saved despite validation
+Bugfix(#00051): Action "duplicate" for variables removed
+Bugfix(#00050): The duplicate of a report configuration gets status "valid" without rerun
+Bugfix(#00049): Non well formed numeric value by using connection type "RRDtool Cacti (SLOW)"
+Bugfix(#00048): Bugfix #00027 removed after the improvement of all SQL statements (see #00038)
+Bugfix(#00047): SQL error occurs during the saving of a new variable
+Bugfix(#00046): "Select All" button does not work in combination with Cacti 0.8.7
+Bugfix(#00045): Missing rrd file causes division by zero messages in conjunction with php bindings
+Bugfix(#00044): True type font arial.ttf removed
+Bugfix(#00043): Missing license for DejaVu true type fonts added
+Bugfix(#00042): 25% more processing performance for great reports (2000 data items) by code reduction / optimization
+Bugfix(#00041): Definition of graph fonts moved from graph to global settings
+Bugfix(#00040): Wrong replacement of interim results can cause syntax errors if simular abbreviations are choosen
+Bugfix(#00039): Critical bug during the data splitting process (in conjunction with time vectors) causes wrong
+                calculation results
+
+Bugfix(#00038): Unexcact SQL statements cause saving errors on systems with sql-mode "strict"
+                -> All table definitions corrected
+                -> Saving procedure for report configurations fixed
+                -> Internal function fixed: reset_report()
+                -> All "JOIN"s replaced by "INNER JOIN"
+
+Bugfix(#00037): The Calculation of the sliding timeframe "current year" returns a wrong start date.
+                This error occurs on every first day of January.
+Bugfix(#00036): The Calculation of the sliding timeframe "current month" returns a wrong start date.
+                This error occurs on every first day of a new month.
+Bugfix(#00035): Wrong sequence of measurands after duplicating a template
+Bugfix(#00034): **Variables are not actualized (wrong internal name) after duplicating a template
+Bugfix(#00033): An error in the calculation module occurs if more than one function with parameters
+                (f_xth, f_sot, f_dot) has been called
+
+Bugfix(#00032): Several css errors fixed (v0.4.2)
+Bugfix(#00031): Connection type "RRDtool Cacti" returns wrong data sources in use with RRDtool 1.0.x (v0.4.2)
+Bugfix(#00030): Issues with sorting the result table (v0.4.2)
+Bugfix(#00029): Unable to notice PHP bindings for Windows (v0.4.2)
+
+Bugfix(#00028): Check for GD Freetype Support
+Bugfix(#00027): Check for my.cnf sql_mode <> STRICT_TRANS_TABLES, STRICT_ALL_TABLES
+Bugfix(#00026): Initialization issue in runtime.php l120 $report_id
+Bugfix(#00025): Initialization issue in runtime.php l463 $buffer
+Bugfix(#00024): Standard call format for includes
+Bugfix(#00023): Verify required php-gd extension prior to using it
+Bugfix(#00022): Documentation change: delete stale graphs every 60 seconds
+Bugfix(#00021): Verify permissions before writing the png graph file
+Bugfix(#00020): Strip graphing code down to a single procedure
+---------------------------------------------------------------------------------------------------------------
+Version 0.5.0:
+---------------------------------------------------------------------------------------------------------------
+Feature:        Create Bar Charts and Pie Charts from reports
+Feature:        Management->Reports->Host Template (optional)
+                Use those Data Source Items only, that belong to Hosts of this Host Template
+Feature:        Management->Reports->Additional Data Source Filter
+                used on the Data Source Item List
+Feature:        Management->Reports->Enable Auto-Generating RRD List
+                List of Data Source will automatically be generated based on filters
+Feature:        Management->Reports->Data Item List
+                Header will show all applied filters
+Feature:        Reports selected from the Reports Tab will show timeframe in headers
+---------------------------------------------------------------------------------------------------------------
+Version 0.4.1:
+---------------------------------------------------------------------------------------------------------------
+Bugfix(#00019): Template/Report Configuration: Issues with Javascript and Mozilla/Firefox
+Bugfix(#00018): Wrong decimal separator
+---------------------------------------------------------------------------------------------------------------
+Version 0.4.0:
+---------------------------------------------------------------------------------------------------------------
+New:            Show local timezone
+New:            Enable/disable timezones
+New:            Use of decimal SI-Prefixes instead of binary ones
+New:            Disable Rounding
+New:            Rounding with binary and decimal SI-Prefixes
+New:            Additional subhead for interface description
+New:            Configurator for templates with measurands and variables
+New:            XSS safeguard for protection against Cross-Side-Scripting
+New:            Headerboxes with hyperlinks
+Bugfix(#00017): Running scheduled reporting from CLI
+Bugfix(#00016): No Warning occurs if sliding time frame is set to "Down To The Present Day" and the end
+                of a defined shift time is a part of the future. The calculation will end at the actual time.
+Bugfix(#00015): Check of Read/write permission for export folders
+Bugfix(#00014): Wrong timestamps with PHP's function "gmmktime()" when Server is not set to UTC/GMT
+---------------------------------------------------------------------------------------------------------------
+Version 0.3.2:
+---------------------------------------------------------------------------------------------------------------
+Bugfix(#00013): Call of the calculation functions changed from pass by reference to call by reference
+Bugfix(#00012): Missing server variable "SCRIPT_FILENAME" in runtime.php
+---------------------------------------------------------------------------------------------------------------
+Version 0.3.1:
+---------------------------------------------------------------------------------------------------------------
+Bugfix(#00011): Definition of table 'reportit_reports' fixed
+Bugfix(#00010): Export header moved from user settings to global settings (settings/reports)
+Bugfix(#00009): Seperate sub folder for export files
+---------------------------------------------------------------------------------------------------------------
+Version 0.3.0:
+---------------------------------------------------------------------------------------------------------------
+New:            Inputfield for maximum excution time of one calculation
+New:            Scheduled Reporting
+New:            New error messages and notices including a link to the correct configuration side
+New:            New fetch via 'rrdtool_execute' and 'RRDtool server', so "reportit" becomes win compatible.
+New:            New file design for the internal library
+Bugfix(#00008): Create table reportit_reports - Invalid values for type BOOL
+Bugfix(#00007): Control of dates for static time frame
+Bugfix(#00006): Restart of an finshed calculation by using browser's navigation buttons
+Bugfix(#00005): Settings 'Current Month' and 'Current Year' define sliding time frame up to now
+Bugfix(#00004): Wrong SI-prefixs for Yotta and Zetta
+Bugfix(#00003): Now user's reports a viewable under 'Public Report Tab' too.
+Bugfix(#00002): Wrong results by RRD-files with a lot of NAN's
+Bugfix(#00001): "24:00:00" added to working time
+---------------------------------------------------------------------------------------------------------------

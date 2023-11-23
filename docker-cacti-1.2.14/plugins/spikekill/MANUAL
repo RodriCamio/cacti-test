@@ -1,0 +1,66 @@
+Spike Killer for Cacti Graphs version 1.1
+
+The spike killer for Cacti Graphs is a newly designed spike killer that, although
+designed to be used with Cacti, does not require Cacti to operate.  If was inspired
+by the original spike killer perl script written by Vins Vilaplana but is an all
+new design, and written in PHP (my favorite scripting language).
+
+This new spike killer chooses two alternate spike kill methodologies that are
+different Vins original work.  In addition to removing spikes, it provides
+reports of the contents of your RRDfiles.
+
+The spike killing methodologies supported in this utility are as follows:
+
+  - Remove via Standard Deviation
+  - Remove via Variance from Average
+
+The Standard Deviation method first calculates the average of all Data Sources and
+RRA's and determines the Standard Deviation of each combination.  It will then
+remove any sample over X Standard Deviations from the Average.  The utility has the
+option of replacing the spike by the average, or by a NaN at your discretion.
+
+The Variance Method first calculates the average of all Data Sources and RRA's.
+Before doing that it removes the top X and bottom X samples from each sample set
+treating them as outliers.  Then, based upon the revised average will remove
+all spikes Y percent above or below the revised averages.  Again, like the
+Standard Deviation method, you have the option of replacing the spike with the
+revised average or a NaN.
+
+For those using a web application to remove spikes, you have the ability to
+format output messages for HTML.
+
+The utility also supports a Dryrun option that will only conduct analysis of the
+RRDfiles and report how many spikes using each methodology would have been removed.
+
+NOTE: The utility does not currently make a backup copy of the RRDfile, and may
+not work with HW predict.  So, please use cautiously.
+
+When you run the utility using the "--help" option, you will receive the following
+output:
+
+Cacti Spike Remover v1.0, Copyright 2009, The Cacti Group, Inc.
+
+Usage:
+removespikes.php -R|--rrdfile=rrdfile [-M|--method=stddev] [-A|--avgnan] [-S|--stddev=N]
+                 [-P|--percent=N] [-N|--number=N] [-D|--dryrun] [-d|--debug]
+                 [--backup] [--html] [-h|--help|-v|-V|--version]
+
+The RRDfile input parameter is mandatory.  If no other input parameters are specified the defaults
+are taken from the Spikekill Plugin settings.
+
+-M|--method      - The spike removal method to use.  Options are 'stddev'|'variance'
+-A|--avgnan      - The spike replacement method to use.  Options are 'avg'|'nan'
+-S|--stddev      - The number of standard deviations +/- allowed
+-P|--percent     - The sample to sample percentage variation allowed
+-N|--number      - The maximum number of spikes to remove from the RRDfile
+-D|--dryrun      - If specified, the RRDfile will not be changed.  Instead a summary of
+                   changes that would have been performed will be issued.
+--backup         - Backup the original RRDfile to preserve prior values.
+
+The remainder of arguments are informational
+--html           - Format the output for a web browser.
+-d|--debug       - Display verbose output during execution
+-v -V --version  - Display this help message
+-h --help        - display this help message
+
+Suggestions, Patches or Improvements to: thewitness@cacti.net.  Enjoy!!

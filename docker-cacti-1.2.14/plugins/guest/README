@@ -1,0 +1,41 @@
+/*******************************************************************************
+
+    Author ......... The Cacti Group
+    Contact ........ http://forums.cacti.net
+    Home Site ...... http://www.cacti.net
+    Program ........ Cacti Guest ACL Control
+    Version ........ 1.0 
+    Purpose ........ Provides Capability to Control Authorized IP's to Cacti
+
+*******************************************************************************/
+
+----[ Purpose
+
+    Allows the Cacti Administrator to maintain a list of either authorized
+    IP Addresses or Ranges, or to restrict IP Addresses or Ranges.
+
+----[ Features
+
+    Allows for Permissive or Restrictive Rules
+	Allows for one to many IP Address Ranges
+
+----[ Prerequisites
+
+    Cacti PIA 2.x
+
+----[ Installation
+
+    Simply place in the plugins directory and install like any other PIA 2.x
+    plugin.
+
+----[ Additional Help?
+
+    If you need additional help, please goto forums.cacti.net.
+
+----[ Possible Bugs?
+
+    See the Cacti Forums
+
+----[ Changelog
+    --- 1.0 ---
+    Initial release

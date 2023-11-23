@@ -1,0 +1,73 @@
+/*******************************************************************************
+
+    Author ......... Andreas Braun
+    Contact ........ browniebraun@cacti.net
+    Home Site ...... http://cacti.net
+    Program ........ SNMPAgent
+    Version ........ 0.2.2
+    Purpose ........ Base SNMP agent for Cacti and Cacti Plugins
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+    Provides common infrastrucutre plugin services for Cacti's Plugin Architecture
+
+----[ Features
+
+    Provides a SNMP agent which allows to query Cacti/Cacti Plugin settings
+    and statistics using SNMP.
+
+----[ Prerequisites
+
+    Before you install SNMPAgent, you need to have met the following pre-requisites:
+
+    1) Cacti 0.8.8a or above.
+    2) Instance of NET-SNMP
+
+----[ Installation
+
+    Install is similar to other plugins.
+    Please view "docs/README" for more information.
+
+----[ Additional Help?
+
+    If you need additional help, please goto forums.cacti.net.
+
+----[ Possible Bugs?
+
+    If you figure out this problem, let me know!!!
+
+----[ Special Thanks
+
+    Special thanks to David Perkins and Evan McGinnis for their great book
+    "Understanding SNMP MIBs".
+
+----[ Future Changes
+    Offers an uniform API for Cacti/Cacti Plugins to send out SNMP traps /
+    notifications.
+
+----[ Changelog
+
+    --- 0.2.2 --
+        Feature: The response time of SNMP walks against the agent running on hugh Cacti environments has been dramatically reduced.
+        Feature: Allow to truncate the notification log completely or per SNMP notification receiver only.
+        Bugfix(#00006): Clear button of SNMPAgent Notification Log not functional.
+
+    --- 0.2.1 --
+        Bugfix(#00005): PIA handels table parameters case sensitive. :|
+        Bugfix(#00004): Undefined variable id in utilities.php
+        Bugfix(#00003): Use of undefined constants EVENT_SEVERITY_LOW, EVENT_SEVERITY_MEDIUM ...
+        Bugfix(#00002): Strict errors under PHP > 5.4 caused by executing non statical methods in a statical way
+        Bugfix(#00001): SNMP traps will be generated although trap receivers have been disabled.
+
+    --- 0.2 ---
+        Feature: Allow Cacti plugins developers to register custom MIBs (SMIv2). Please request an OID first! developers@cacti.net
+        Feature: A Graphical User Interface offers the possibility to review the MIB Cache within Cacti
+        Feature: Registration of SNMP notification receivers and individual selection of known SNMP notifications
+        Feature: Generation of SNMP notifications (v1, v2c and v3) based on Net-SNMP
+        Feature: Additional Cacti templates
+
+    --- 0.1 ---
+        -initial release

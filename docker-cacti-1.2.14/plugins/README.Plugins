@@ -1,0 +1,18 @@
+If you read this and care about keeping your system maintainable, please change
+the layout of the plugins structure of cacti. Due to the way a lot of plug-ins
+are written (details in bug #681558) in combination with Debian policy, I can
+not fix this in the package.
+
+* Create a directory /usr/local/share/cacti/plugins:
+  mkdir /usr/local/share/cacti/plugins
+* Move all content of /usr/share/cacti/site/plugins to
+  /usr/local/share/cacti/plugins
+  mv /usr/share/cacti/site/plugins/* /usr/local/share/cacti/plugins/
+* Remove the empty /usr/share/cacti/site/plugins directory
+  rmdir /usr/share/cacti/site/plugins
+* Create the following symlinks:
+  ln -s /usr/local/share/cacti/plugins /usr/share/cacti/site/plugins
+  ln -s /usr/share/cacti/site/include /usr/local/share/cacti/include
+  ln -s /usr/share/cacti/site/lib /usr/local/share/cacti/lib
+
+ -- Paul Gevers <elbrus@debian.org>  Wed, 01 Aug 2012 22:32:32 +0200

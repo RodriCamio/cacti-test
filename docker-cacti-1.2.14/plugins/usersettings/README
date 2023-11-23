@@ -1,0 +1,30 @@
+/*******************************************************************************
+
+    Author ......... The Cacti Group
+    Home Site ...... http://cacti.net
+    Purpose ........ User Settings
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+	This plugin is for allowing users to save their own preferences for Cacti's visual settings
+
+----[ Installation
+
+	To install the plugin, please refer to the Plugin Installation Documentation
+
+----[ Possible Bugs?
+   
+	If you find a problem, let me know!!! http://cacti.net/bugs.php
+
+----[ Future Changes
+
+	User Password resets
+
+----[ Changelog
+
+	--- 0.1 ---
+		 Initial Version
+

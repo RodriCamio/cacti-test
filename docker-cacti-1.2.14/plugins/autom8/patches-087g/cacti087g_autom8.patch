@@ -1,0 +1,279 @@
+diff -Nabur cli/add_graph_template.php cli/add_graph_template.php
+--- cli/add_graph_template.php	2010-07-10 00:33:46.000000000 +0200
++++ cli/add_graph_template.php	2010-07-12 20:32:22.134082064 +0200
+@@ -144,6 +144,7 @@
+ 		exit(1);
+ 	}else{
+ 		db_execute("replace into host_graph (host_id,graph_template_id) values (" . $host_id . "," . $graph_template_id . ")");
++      api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $host_id, "graph_template_id" => $graph_template_id));
+ 	}
+ 
+ 	if (is_error_message()) {
+diff -Nabur cli/add_tree.php cli/add_tree.php
+--- cli/add_tree.php	2010-07-10 00:33:46.000000000 +0200
++++ cli/add_tree.php	2010-07-12 20:32:22.135082058 +0200
+@@ -33,6 +33,7 @@
+ include(dirname(__FILE__)."/../include/global.php");
+ include_once($config["base_path"]."/lib/api_automation_tools.php");
+ include_once($config["base_path"].'/lib/tree.php');
++include_once($config["base_path"].'/lib/api_tree.php');
+ 
+ /* process calling arguments */
+ $parms = $_SERVER["argv"];
+diff -Nabur cli/host_update_template.php cli/host_update_template.php
+--- cli/host_update_template.php	2010-07-10 00:33:46.000000000 +0200
++++ cli/host_update_template.php	2010-07-12 20:32:22.136080305 +0200
+@@ -136,6 +136,7 @@
+ 
+ 			foreach ($graph_templates as $graph_template) {
+ 				db_execute("REPLACE INTO host_graph (host_id, graph_template_id) VALUES (" . $host["id"] . ", " . $graph_template["graph_template_id"] . ")");
++            api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $host_id, "graph_template_id" => $graph_template["graph_template_id"]));
+ 			}
+ 		}
+ 	}
+diff -Nabur host.php host.php
+--- host.php	2010-07-10 11:50:50.368399754 +0200
++++ host.php	2010-07-12 20:32:22.137080648 +0200
+@@ -139,6 +139,7 @@
+ 		/* ==================================================== */
+ 
+ 		db_execute("replace into host_graph (host_id,graph_template_id) values (" . $_POST["id"] . "," . $_POST["graph_template_id"] . ")");
++      api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $_POST["id"], "graph_template_id" => $_POST["graph_template_id"]));
+ 
+ 		header("Location: host.php?action=edit&id=" . $_POST["id"]);
+ 		exit;
+diff -Nabur lib/api_automation_tools.php lib/api_automation_tools.php
+--- lib/api_automation_tools.php	2010-07-10 00:33:46.000000000 +0200
++++ lib/api_automation_tools.php	2010-07-12 20:34:35.384081272 +0200
+@@ -22,117 +22,6 @@
+  +-------------------------------------------------------------------------+
+  */
+ 
+-function api_tree_item_save($id, $tree_id, $type, $parent_tree_item_id,
+-	$title, $local_graph_id, $rra_id, $host_id, $host_grouping_type,
+-	$sort_children_type, $propagate_changes) {
+-
+-	global $config;
+-
+-	include_once($config["library_path"] . "/tree.php");
+-
+-	$parent_order_key = db_fetch_cell("select order_key from graph_tree_items where id=$parent_tree_item_id");
+-
+-	/* fetch some cache variables */
+-	if (empty($id)) {
+-		/* new/save - generate new order key */
+-		$order_key = get_next_tree_id($parent_order_key, "graph_tree_items", "order_key", "graph_tree_id=$tree_id");
+-	}else{
+-		/* edit/save - use old order_key */
+-		$order_key = db_fetch_cell("select order_key from graph_tree_items where id=$id");
+-	}
+-
+-	/* duplicate graph check */
+-	$search_key = substr($parent_order_key, 0, (tree_tier($parent_order_key) * CHARS_PER_TIER));
+-	if (($type == TREE_ITEM_TYPE_GRAPH) && (sizeof(db_fetch_assoc("select id from graph_tree_items where local_graph_id='$local_graph_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'")) > 0)) {
+-		return db_fetch_cell("select id from graph_tree_items where local_graph_id='$local_graph_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'");
+-	}
+-
+-	/* Duplicate header check */
+-	if (($type == TREE_ITEM_TYPE_HEADER)) {
+-		if ((sizeof(db_fetch_assoc("select id from graph_tree_items where title='$title' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'")) > 0)) {
+-			return db_fetch_cell("select id from graph_tree_items where title='$title' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'");
+-		}
+-	}
+-
+-	$save["id"]                 = $id;
+-	$save["graph_tree_id"]      = $tree_id;
+-	$save["title"]              = form_input_validate($title, "title", "", ($type == TREE_ITEM_TYPE_HEADER ? false : true), 3);
+-	$save["order_key"]          = $order_key;
+-	$save["local_graph_id"]     = form_input_validate($local_graph_id, "local_graph_id", "", true, 3);
+-	$save["rra_id"]	            = form_input_validate($rra_id, "rra_id", "", true, 3);
+-	$save["host_id"]            = form_input_validate($host_id, "host_id", "", true, 3);
+-	$save["host_grouping_type"] = form_input_validate($host_grouping_type, "host_grouping_type", "", true, 3);
+-	$save["sort_children_type"] = form_input_validate($sort_children_type, "sort_children_type", "", true, 3);
+-
+-	$tree_item_id = 0;
+-
+-	if (!is_error_message()) {
+-		$tree_item_id = sql_save($save, "graph_tree_items");
+-
+-		if ($tree_item_id) {
+-			raise_message(1);
+-
+-			/* re-parent the branch if the parent item has changed */
+-			if ($parent_tree_item_id != $tree_item_id) {
+-				reparent_branch($parent_tree_item_id, $tree_item_id);
+-			}
+-
+-			$tree_sort_type = db_fetch_cell("select sort_type from graph_tree where id='$tree_id'");
+-
+-			/* tree item ordering */
+-			if ($tree_sort_type == TREE_ORDERING_NONE) {
+-				/* resort our parent */
+-				$parent_sorting_type = db_fetch_cell("select sort_children_type from graph_tree_items where id=$parent_tree_item_id");
+-
+-				if ((!empty($parent_tree_item_id)) && ($parent_sorting_type != TREE_ORDERING_NONE)) {
+-					sort_tree(SORT_TYPE_TREE_ITEM, $parent_tree_item_id, $parent_sorting_type);
+-				}
+-
+-				/* if this is a header, sort direct children */
+-				if (($type == TREE_ITEM_TYPE_HEADER) && ($sort_children_type != TREE_ORDERING_NONE)) {
+-					sort_tree(SORT_TYPE_TREE_ITEM, $tree_item_id, $sort_children_type);
+-				}
+-				/* tree ordering */
+-			}else{
+-				/* potential speed savings for large trees */
+-				if (tree_tier($save["order_key"]) == 1) {
+-					sort_tree(SORT_TYPE_TREE, $tree_id, $tree_sort_type);
+-				}else{
+-					sort_tree(SORT_TYPE_TREE_ITEM, $parent_tree_item_id, $tree_sort_type);
+-				}
+-			}
+-
+-			/* if the user checked the 'Propagate Changes' box */
+-			if (($type == TREE_ITEM_TYPE_HEADER) && ($propagate_changes == true)) {
+-				$search_key = preg_replace("/0+$/", "", $order_key);
+-
+-				$tree_items = db_fetch_assoc("select
+-					graph_tree_items.id
+-					from graph_tree_items
+-					where graph_tree_items.host_id = 0
+-					and graph_tree_items.local_graph_id = 0
+-					and graph_tree_items.title != ''
+-					and graph_tree_items.order_key like '$search_key%%'
+-					and graph_tree_items.graph_tree_id='$tree_id'");
+-
+-				if (sizeof($tree_items) > 0) {
+-					foreach ($tree_items as $item) {
+-						db_execute("update graph_tree_items set sort_children_type = '$sort_children_type' where id = '" . $item["id"] . "'");
+-
+-						if ($sort_children_type != TREE_ORDERING_NONE) {
+-							sort_tree(SORT_TYPE_TREE_ITEM, $item["id"], $sort_children_type);
+-						}
+-					}
+-				}
+-			}
+-		}else{
+-			raise_message(2);
+-		}
+-	}
+-
+-	return $tree_item_id;
+-}
+-
+ function getHostTemplates() {
+ 	$tmpArray = db_fetch_assoc("select id, name from host_template order by id");
+ 
+diff -Nabur lib/api_device.php lib/api_device.php
+--- lib/api_device.php	2010-07-10 11:50:50.399399439 +0200
++++ lib/api_device.php	2010-07-12 20:32:22.138078755 +0200
+@@ -178,11 +178,16 @@
+ 			if (sizeof($graph_templates) > 0) {
+ 			foreach ($graph_templates as $graph_template) {
+ 				db_execute("replace into host_graph (host_id,graph_template_id) values ($host_id," . $graph_template["graph_template_id"] . ")");
++            api_plugin_hook_function('add_graph_template_to_host', array("host_id" => $host_id, "graph_template_id" => $graph_template["graph_template_id"]));
+ 			}
+ 			}
+ 		}
+ 	}
+ 
++	# now that we have the id of the new host, we may plugin postprocessing code
++	$save["id"] = $host_id;
++	api_plugin_hook_function('api_device_new', $save);
++
+ 	return $host_id;
+ }
+ 
+diff -Nabur lib/api_graph.php lib/api_graph.php
+--- lib/api_graph.php	2010-07-10 00:33:46.000000000 +0200
++++ lib/api_graph.php	2010-07-12 20:37:34.050081666 +0200
+@@ -82,7 +82,7 @@
+ }
+ 
+ /* api_reapply_suggested_graph_title - reapplies the suggested name to a graph title
+-   @arg $graph_templates_graph_id - the id of the graph to reapply the name to
++   @param int $graph_templates_graph_id - the id of the graph to reapply the name to
+ */
+ function api_reapply_suggested_graph_title($local_graph_id) {
+ 	global $config;
+@@ -95,10 +95,19 @@
+ 		return;
+ 	}
+ 
+-	/* get the host associated with this graph */
+-	$graph_local = db_fetch_row("select host_id, graph_template_id, snmp_query_id, snmp_index from graph_local where id=" . $local_graph_id);
++	/* get the host associated with this graph for data queries only
++	 * there's no "reapply suggested title" for "simple" graph templates */
++	$graph_local = db_fetch_row("select host_id, graph_template_id, snmp_query_id, snmp_index from graph_local where snmp_query_id>0 AND id=" . $local_graph_id);
++	/* if this is not a data query graph, simply return */
++	if (!isset($graph_local["host_id"])) {
++		return;
++	}
+ 	$snmp_query_graph_id = db_fetch_cell("select id from snmp_query_graph where graph_template_id=" . $graph_local["graph_template_id"] .
+ 										" and snmp_query_id=" . $graph_local["snmp_query_id"]);
++	/* no snmp query graph id found */
++	if ($snmp_query_graph_id == 0) {
++		return;
++	}
+ 
+ 	/* get the suggested values from the suggested values cache */
+ 	$suggested_values = db_fetch_assoc("select text,field_name from snmp_query_graph_sv where snmp_query_graph_id=" . $snmp_query_graph_id . " order by sequence");
+diff -Nabur lib/api_tree.php lib/api_tree.php
+--- lib/api_tree.php	2010-07-10 00:33:46.000000000 +0200
++++ lib/api_tree.php	2010-07-12 20:32:22.139079936 +0200
+@@ -44,8 +44,20 @@
+ 
+ 	/* duplicate graph check */
+ 	$search_key = substr($parent_order_key, 0, (tree_tier($parent_order_key) * CHARS_PER_TIER));
+-	if (($type == TREE_ITEM_TYPE_GRAPH) && (sizeof(db_fetch_assoc("select id from graph_tree_items where local_graph_id='$local_graph_id' and rra_id='$rra_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'")) > 0)) {
+-		return 0;
++	if (($type == TREE_ITEM_TYPE_GRAPH) && (sizeof(db_fetch_assoc("select id from graph_tree_items where local_graph_id='$local_graph_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'")) > 0)) {
++		return db_fetch_cell("select id from graph_tree_items where local_graph_id='$local_graph_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'");
++	}
++
++	/* Duplicate header check */
++	if (($type == TREE_ITEM_TYPE_HEADER)) {
++		if ((sizeof(db_fetch_assoc("select id from graph_tree_items where title='$title' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'")) > 0)) {
++			return db_fetch_cell("select id from graph_tree_items where title='$title' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'");
++		}
++	}
++
++	/* Duplicate host check */
++	if (($type == TREE_ITEM_TYPE_HOST) && (sizeof(db_fetch_assoc("select id from graph_tree_items where host_id='$host_id' and local_graph_id='$local_graph_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'")) > 0)) {
++			return db_fetch_cell("select id from graph_tree_items where host_id='$host_id' and local_graph_id='$local_graph_id' and graph_tree_id='$tree_id' and order_key like '$search_key" . str_repeat('_', CHARS_PER_TIER) . str_repeat('0', (MAX_TREE_DEPTH * CHARS_PER_TIER) - (strlen($search_key) + CHARS_PER_TIER)) . "'");
+ 	}
+ 
+ 	$save["id"] = $id;
+diff -Nabur lib/data_query.php lib/data_query.php
+--- lib/data_query.php	2010-07-10 00:33:46.000000000 +0200
++++ lib/data_query.php	2010-07-12 20:32:22.140081187 +0200
+@@ -56,6 +56,8 @@
+ 	/* update the poller cache */
+ 	update_poller_cache_from_query($host_id, $snmp_query_id);
+ 
++   api_plugin_hook_function('run_data_query', array("host_id" => $host_id, "snmp_query_id" => $snmp_query_id));
++
+ 	return (isset($result) ? $result : true);
+ }
+ 
+diff -Nabur lib/template.php lib/template.php
+--- lib/template.php	2010-07-10 00:33:46.000000000 +0200
++++ lib/template.php	2010-07-12 20:32:22.141079574 +0200
+@@ -786,6 +786,18 @@
+ 		update_graph_data_query_cache($cache_array["local_graph_id"]);
+ 	}
+ 
++	# now that we have the id of the new host, we may plugin postprocessing code
++	$save["id"] = $cache_array["local_graph_id"];
++	$save["graph_template_id"] = $graph_template_id;	// attention: unset!
++	if (is_array($snmp_query_array)) {
++		$save["snmp_query_id"] = $snmp_query_array["snmp_query_id"];
++		$save["snmp_index"] = $snmp_query_array["snmp_index"];
++	} else {
++		$save["snmp_query_id"] = 0;
++		$save["snmp_index"] = 0;
++	}
++	api_plugin_hook_function('create_complete_graph_from_template', $save);
++
+ 	return $cache_array;
+ }
+ 

@@ -1,0 +1,60 @@
+/*******************************************************************************
+
+    Author ......... Jimmy Conner
+    Contact ........ jimmy@sqmail.org
+    Home Site ...... http://cactiusers.org
+    Program ........ Report Creator
+    Version ........ 0.4
+    Purpose ........ Allows you to send graphs via Email
+
+*******************************************************************************/
+
+
+----[ Purpose
+
+	This plugin allows you to email graphs on a specified interval and time
+
+----[ Features
+
+	Not many yet
+
+----[ Installation
+
+	If you have not already done so, install the Plugin Architecture
+	http://cactiusers.org/wiki/PluginArchitectureInstall
+
+	Next install this Plugin using these directions
+	http://cactiusers.org/wiki/PluginsInstall
+	
+	For more information on this plugin
+	http://cactiusers.org/wiki/ReportsDocs
+
+	Dont forget to apply the reports.sql to your cacti database
+
+	Give users the appropriate rights to create/view reports 
+
+      For windows users, make sure you set the "temporary reports directory" in cacti settings->paths tab to something like "c:\temp\"  not "\tmp\"
+      on windows installations, PHP-gd (and php-gd2) are included but not enabled by default. See here for instructions to enable:
+	http://www.jpowered.com/php-scripts/php-gd.htm
+
+	
+    
+----[ Changelog
+	--- Planned additions in future version --
+		Ability to duplicate an exsisting report (so you can send a report to different people at different intervals
+		add a link in the report to go to the original (so you can zoom, change duration etc)
+	--- 0.3 ---
+		Set "SendNow" as default action instead of "delete"
+		Added ability to schedule reports as daily (everyday), weekly (on a specific day of the week) or monthly (on the first of each month)reports
+		fixed small bug where sendmail authorization was set to true even though was not needed (thanks JackHack for catching that one)
+
+	--- 0.2 ---
+		Allows for JPEG Inline Images, requires php-gd
+
+	--- 0.1 ---
+		Now auto-creates its tables
+
+	--- 0.1b ---
+		Initial release
+     
+
